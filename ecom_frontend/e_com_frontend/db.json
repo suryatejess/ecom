@@ -1,0 +1,40 @@
+{
+    "products": [
+        {
+            "id": 1,
+            "name": "samsung phone",
+            "image": "https://images.unsplash.com/photo-1752432138370-b2114a7971ac?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+            "price": 44,
+            "shortDesc": "this is a phone",
+            "longDesc": "this is a phoen made by samsung",
+            "available_quantity": 4
+        },
+        {
+            "id": 2,
+            "name": "iphone",
+            "image": "https://miro.medium.com/v2/resize:fit:2000/1*dQFAOKczePP3sN0Pm2oFPQ.jpeg",
+            "price": 44,
+            "shortDesc": "this is a phone",
+            "longDesc": "this is a phoen made by samsung",
+            "available_quantity": 4
+        },
+        {
+            "id": 3,
+            "name": "samsung phone",
+            "image": "https://plus.unsplash.com/premium_photo-1664040392323-ac5909ade92a?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxleHBsb3JlLWZlZWR8MXx8fGVufDB8fHx8fA%3D%3D",
+            "price": 44,
+            "shortDesc": "this is a phone",
+            "longDesc": "this is a phoen made by samsung",
+            "available_quantity": 4
+        },
+        {
+            "id": 4,
+            "name": "samsung phone",
+            "image": "https://images.unsplash.com/photo-1538991383142-36c4edeaffde?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8ZnJlZXxlbnwwfHwwfHx8MA%3D%3D",
+            "price": 44,
+            "shortDesc": "this is a phone",
+            "longDesc": "this is a phoen made by samsung",
+            "available_quantity": 4
+        }
+    ]
+}
