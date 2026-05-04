@@ -4,6 +4,7 @@ import com.example.ecom_backend.dtos.ProductDTO;
 import com.example.ecom_backend.entities.Product;
 import com.example.ecom_backend.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -45,6 +46,7 @@ public class ProductController {
     }
 
     @PostMapping("/")
+    @PreAuthorize("hasRole('ADMIN')")
     public void save(@RequestBody ProductDTO productDTO){
         Product product = new Product();
 

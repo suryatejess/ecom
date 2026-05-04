@@ -76,22 +76,6 @@ public class UserController {
         return "user created";
     }
 
-    @PostMapping("/createAdmin")
-    public String createAdmin(@RequestBody UserSignUpDTO dto){
-
-        AppUser appUser = new AppUser();
-
-        userService.createAdmin(
-                dto.getUsername(),
-                dto.getPassword(),
-                dto.getName(),
-                dto.getEmail(),
-                dto.getAddress()
-        );
-
-        return "admin created";
-    }
-
     @PostMapping("/login")
     public ResponseEntity<Object> login(@RequestBody UserLoginDTO dto, HttpServletResponse response){
         String username = dto.getUsername();
