@@ -5,6 +5,8 @@ import com.example.ecom_backend.dtos.ProductUpdateDTO;
 import com.example.ecom_backend.entities.Product;
 import com.example.ecom_backend.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,6 +36,15 @@ public class ProductController {
     @GetMapping("/")
     public List<Product> findAll(){
         return productService.findAll();
+    }
+
+    @GetMapping("/admin/search")
+    @PreAuthorize("hasRole('ADMIN')")
+    public Page<Product> findAllPaginated(Pageable pageable, @RequestParam(required = false) String search) {
+        if (search != null && !search.isEmpty()) {
+            return productService.searchProducts(search, pageable);
+        }
+        return productService.findAll(pageable);
     }
 
     @GetMapping("/{id}")

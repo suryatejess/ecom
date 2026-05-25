@@ -5,6 +5,10 @@ const AdminProducts = () => {
     const backendUrl = import.meta.env.VITE_API_BASE_URL;
     const [products, setProducts] = useState([]);
     const [search, setSearch] = useState("");
+    const [page, setPage] = useState(0);
+    const [totalPages, setTotalPages] = useState(0);
+    const [totalElements, setTotalElements] = useState(0);
+    const pageSize = 100;
     const [editingId, setEditingId] = useState(null);
     const [editForm, setEditForm] = useState({});
     const [showAddForm, setShowAddForm] = useState(false);
@@ -19,12 +23,27 @@ const AdminProducts = () => {
 
     useEffect(() => {
         fetchProducts();
-    }, []);
+    }, [page]);
 
     const fetchProducts = async () => {
-        const res = await fetch(`${backendUrl}/product/`);
+        let url = `${backendUrl}/product/admin/search?page=${page}&size=${pageSize}`;
+        if (search.trim()) {
+            url += `&search=${encodeURIComponent(search)}`;
+        }
+        const res = await fetch(url, { credentials: "include" });
+        if (!res.ok) {
+            toast.error("Failed to fetch products");
+            return;
+        }
         const data = await res.json();
-        setProducts(data);
+        setProducts(data.content);
+        setTotalPages(data.totalPages);
+        setTotalElements(data.totalElements);
+    };
+
+    const handleSearch = () => {
+        setPage(0);
+        fetchProducts();
     };
 
     const deleteProduct = async (id) => {
@@ -68,14 +87,6 @@ const AdminProducts = () => {
         }
     };
 
-    const filteredProducts = products.filter((p) => {
-        const q = search.toLowerCase();
-        return (
-            p.name.toLowerCase().includes(q) ||
-            String(p.id).includes(q)
-        );
-    });
-
     const addProduct = async () => {
         const res = await fetch(`${backendUrl}/product/`, {
             method: "POST",
@@ -96,7 +107,7 @@ const AdminProducts = () => {
     return (
         <div>
             <div className="flex justify-between items-center mb-4">
-                <h2 className="text-xl font-semibold">Products ({filteredProducts.length})</h2>
+                <h2 className="text-xl font-semibold">Products ({totalElements})</h2>
                 <button
                     onClick={() => setShowAddForm(!showAddForm)}
                     className="bg-black text-white px-4 py-2 rounded text-sm"
@@ -105,13 +116,30 @@ const AdminProducts = () => {
                 </button>
             </div>
 
-            <input
-                type="text"
-                placeholder="Search by name or ID..."
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                className="border rounded px-3 py-2 text-sm w-full mb-6"
-            />
+            <div className="flex gap-2 mb-6">
+                <input
+                    type="text"
+                    placeholder="Search by name or ID..."
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                    onKeyDown={(e) => e.key === "Enter" && handleSearch()}
+                    className="border rounded px-3 py-2 text-sm flex-1"
+                />
+                <button
+                    onClick={handleSearch}
+                    className="bg-black text-white px-4 py-2 rounded text-sm"
+                >
+                    Search
+                </button>
+                {search && (
+                    <button
+                        onClick={() => { setSearch(""); setPage(0); setTimeout(fetchProducts, 0); }}
+                        className="border rounded px-4 py-2 text-sm"
+                    >
+                        Clear
+                    </button>
+                )}
+            </div>
 
             {showAddForm && (
                 <div className="border rounded p-4 mb-6 space-y-3">
@@ -140,7 +168,7 @@ const AdminProducts = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {filteredProducts.map((product) => (
+                    {products.map((product) => (
                         <tr key={product.id} className="border-b">
                             {editingId === product.id ? (
                                 <>
@@ -179,6 +207,28 @@ const AdminProducts = () => {
                     ))}
                 </tbody>
             </table>
+
+            {totalPages > 1 && (
+                <div className="flex items-center justify-center gap-4 mt-6">
+                    <button
+                        onClick={() => setPage(Math.max(page - 1, 0))}
+                        disabled={page === 0}
+                        className="border rounded px-3 py-1 text-sm disabled:opacity-30"
+                    >
+                        Previous
+                    </button>
+                    <span className="text-sm">
+                        Page {page + 1} of {totalPages}
+                    </span>
+                    <button
+                        onClick={() => setPage(Math.min(page + 1, totalPages - 1))}
+                        disabled={page >= totalPages - 1}
+                        className="border rounded px-3 py-1 text-sm disabled:opacity-30"
+                    >
+                        Next
+                    </button>
+                </div>
+            )}
         </div>
     );
 };

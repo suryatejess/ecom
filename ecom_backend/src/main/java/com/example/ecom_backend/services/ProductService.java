@@ -12,6 +12,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.beans.PropertyDescriptor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
+import java.beans.PropertyDescriptor;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -24,6 +28,14 @@ public class ProductService {
 
     public List<Product> findAll() {
         return repo.findAll();
+    }
+
+    public Page<Product> findAll(Pageable pageable) {
+        return repo.findAll(pageable);
+    }
+
+    public Page<Product> searchProducts(String search, Pageable pageable) {
+        return repo.searchProducts(search, pageable);
     }
 
     public void save(Product product) {
