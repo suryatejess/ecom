@@ -8,6 +8,8 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,6 +28,7 @@ public class ProductService {
     @Autowired
     ProductRepository repo;
 
+    @Cacheable("products")
     public List<Product> findAll() {
         return repo.findAll();
     }
@@ -38,6 +41,7 @@ public class ProductService {
         return repo.searchProducts(search, pageable);
     }
 
+    @CacheEvict(value = "products", allEntries = true)
     public void save(Product product) {
         repo.save(product);
     }
@@ -47,7 +51,7 @@ public class ProductService {
         return repo.findById(id)
                 .orElseThrow(() -> new ProductNotFoundException("Product not found with id: " + id));
     }
-
+    @CacheEvict(value = "products", allEntries = true)
     public void deleteById(Long id) {
         if (!repo.existsById(id)) {
             throw new ProductNotFoundException("Product not found with id: " + id);
@@ -55,6 +59,7 @@ public class ProductService {
         repo.deleteById(id);
     }
 
+    @CacheEvict(value = "products", allEntries = true)
     public void modify(Long productId, ProductUpdateDTO updatedProduct) {
         if(productId == null || productId == 0){
             throw new  ProductNotFoundException("Product not found with id: " + productId);
