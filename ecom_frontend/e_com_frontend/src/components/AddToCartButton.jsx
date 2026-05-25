@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useCart } from "../contexts/CartContext";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 
 const AddToCartButton = ({ id }) => {
     const { addToCart } = useCart();
@@ -26,11 +26,6 @@ const AddToCartButton = ({ id }) => {
                 +
             </button>
 
-            <div>
-                <div>
-                    <Toaster />
-                </div>
-            </div>
         </>
     );
 };

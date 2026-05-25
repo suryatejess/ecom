@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 
 import { useCart } from "../contexts/CartContext";
 import { useAuth } from "../contexts/AuthContext";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 
 const ProductPage = (props) => {
     const { id } = useParams();
@@ -84,8 +84,6 @@ const ProductPage = (props) => {
 
                         {/* down */}
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mt-8 items-start">
-                            <Toaster />
-
                             {/* image  */}
                             <div className="bg-gray-100 rounded-xl p-6 flex items-center justify-center">
                                 <img

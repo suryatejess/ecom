@@ -63,9 +63,9 @@ const OrderSummary = (props) => {
                 throw new Error(data.message || "Failed to place order");
             }
 
-            await clearCart();
-
             toast.success("Order placed successfully!");
+
+            await clearCart();
         } catch (err) {
             toast.error(err.message);
         }
