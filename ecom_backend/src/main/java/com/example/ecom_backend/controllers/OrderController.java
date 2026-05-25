@@ -59,7 +59,14 @@ public class OrderController {
 
     @GetMapping("/{id}")
     public Order getOrderById(@PathVariable int id){
-        return orderService.getOrderById(id);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+
+        Order order = orderService.getOrderById(id);
+        if (!order.getAppUser().getUsername().equals(username)) {
+            throw new RuntimeException("You do not have access to this order");
+        }
+        return order;
     }
 
     @DeleteMapping("/{id}")
