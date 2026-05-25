@@ -185,6 +185,10 @@ public class OrderService {
         orderRepository.save(order);
     }
 
+    public Page<OrderResponseDTO> fetchOrderByStatus(OrderStatus status, Pageable pageable){
+        return orderRepository.findByOrderStatus(status, pageable).map(this::mapToOrderResponseDTO);
+    }
+
     public void deleteOrderById(int id){
         orderRepository.deleteById(id);
     }
