@@ -1,10 +1,13 @@
 package com.example.ecom_backend.services;
 
+import com.example.ecom_backend.dtos.UserResponseDTO;
 import com.example.ecom_backend.entities.AppUser;
 import com.example.ecom_backend.entities.RoleType;
 import com.example.ecom_backend.exceptions.UsernameAlreadyExistsException;
 import com.example.ecom_backend.repositories.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -61,6 +64,21 @@ public class UserService implements UserDetailsService {
         userRepo.save(user);
 
         return "user successfully created";
+    }
+
+    public Page<UserResponseDTO> findUserBySearch(String search, Pageable pageable){
+        return userRepo.findBySearch(search, pageable).map(this::mapToUserResponseDTO);
+    }
+
+    private UserResponseDTO mapToUserResponseDTO(AppUser user) {
+        UserResponseDTO dto = new UserResponseDTO();
+        dto.setId(user.getId());
+        dto.setUsername(user.getUsername());
+        dto.setName(user.getName());
+        dto.setEmail(user.getEmail());
+        dto.setAddress(user.getAddress());
+        dto.setRoleType(user.getRoleType().name());
+        return dto;
     }
 
     public AppUser loadByUserId(Long id){

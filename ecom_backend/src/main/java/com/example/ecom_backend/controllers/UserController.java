@@ -3,6 +3,7 @@ package com.example.ecom_backend.controllers;
 import com.example.ecom_backend.config.AppConfigurationProperties;
 import com.example.ecom_backend.dtos.UserLoginDTO;
 import com.example.ecom_backend.dtos.UserSignUpDTO;
+import com.example.ecom_backend.dtos.UserResponseDTO;
 import com.example.ecom_backend.entities.AppUser;
 import com.example.ecom_backend.exceptions.WrongUserCredentials;
 import com.example.ecom_backend.repositories.UserRepo;
@@ -12,6 +13,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
@@ -122,6 +125,12 @@ public class UserController {
         AppUser user = (AppUser) authentication.getPrincipal();
 
         return ResponseEntity.ok(user);
+    }
+
+    @GetMapping("/search")
+    @PreAuthorize("hasRole('ADMIN')")
+    public Page<UserResponseDTO> findUserBySearch(@RequestParam String search, Pageable pageable){
+        return userService.findUserBySearch(search, pageable);
     }
 
     @GetMapping("/admin/users")
