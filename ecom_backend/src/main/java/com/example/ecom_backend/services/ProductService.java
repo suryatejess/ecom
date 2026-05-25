@@ -1,6 +1,6 @@
 package com.example.ecom_backend.services;
 
-import com.example.ecom_backend.dtos.ProductDTO;
+import com.example.ecom_backend.dtos.ProductUpdateDTO;
 import com.example.ecom_backend.entities.Product;
 import com.example.ecom_backend.exceptions.ProductNotFoundException;
 import com.example.ecom_backend.repositories.ProductRepository;
@@ -43,7 +43,7 @@ public class ProductService {
         repo.deleteById(id);
     }
 
-    public void modify(Long productId, ProductDTO updatedProduct) {
+    public void modify(Long productId, ProductUpdateDTO updatedProduct) {
         if(productId == null || productId == 0){
             throw new  ProductNotFoundException("Product not found with id: " + productId);
         }

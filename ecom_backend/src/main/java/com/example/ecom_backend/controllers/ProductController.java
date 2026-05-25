@@ -1,6 +1,7 @@
 package com.example.ecom_backend.controllers;
 
 import com.example.ecom_backend.dtos.ProductDTO;
+import com.example.ecom_backend.dtos.ProductUpdateDTO;
 import com.example.ecom_backend.entities.Product;
 import com.example.ecom_backend.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,11 +56,10 @@ public class ProductController {
         productService.save(product);
     }
 
-    // TODO: PUT '/id' - change properties of product with that id
     @PatchMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public void update(@PathVariable Long id, @RequestBody ProductDTO productDTO){
-        productService.modify(id, productDTO);
+    public void update(@PathVariable Long id, @RequestBody ProductUpdateDTO productUpdateDTO){
+        productService.modify(id, productUpdateDTO);
     }
 
     @DeleteMapping("/{id}")

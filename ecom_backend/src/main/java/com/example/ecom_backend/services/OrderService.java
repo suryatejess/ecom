@@ -177,6 +177,13 @@ public class OrderService {
         return orders.map(this::mapToOrderResponseDTO);
     }
 
+    public void updateOrderStatus(Long id, OrderStatus status) {
+        Order order = orderRepository.findById(id.intValue())
+                .orElseThrow(() -> new RuntimeException("Order not found with id: " + id));
+        order.setOrderStatus(status);
+        orderRepository.save(order);
+    }
+
     public void deleteOrderById(int id){
         orderRepository.deleteById(id);
     }

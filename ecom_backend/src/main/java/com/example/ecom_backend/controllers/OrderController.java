@@ -1,6 +1,7 @@
 package com.example.ecom_backend.controllers;
 
 import com.example.ecom_backend.dtos.OrderResponseDTO;
+import com.example.ecom_backend.dtos.OrderStatusUpdateDTO;
 import com.example.ecom_backend.dtos.PlaceOrderRequestDTO;
 import com.example.ecom_backend.entities.Order;
 import com.example.ecom_backend.services.OrderService;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -75,6 +77,12 @@ public class OrderController {
     @PreAuthorize("hasRole('ADMIN')")
     public Page<OrderResponseDTO> getAllOrders(Pageable pageable){
         return orderService.getAllOrders(pageable);
+    }
+
+    @PutMapping("/{id}/status")
+    @PreAuthorize("hasRole('ADMIN')")
+    public void updateOrderStatus(@PathVariable Long id, @RequestBody OrderStatusUpdateDTO dto){
+        orderService.updateOrderStatus(id, dto.getStatus());
     }
 
 }
