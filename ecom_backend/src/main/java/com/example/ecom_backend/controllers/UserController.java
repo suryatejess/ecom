@@ -22,11 +22,15 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/auth")
@@ -118,6 +122,20 @@ public class UserController {
         AppUser user = (AppUser) authentication.getPrincipal();
 
         return ResponseEntity.ok(user);
+    }
+
+    @GetMapping("/admin/users")
+    @PreAuthorize("hasRole('ADMIN')")
+    public List<Map<String, Object>> getAllUsers() {
+        return userRepo.findAll().stream().map(user -> {
+            Map<String, Object> map = new java.util.HashMap<>();
+            map.put("id", user.getId());
+            map.put("username", user.getUsername());
+            map.put("name", user.getName());
+            map.put("email", user.getEmail());
+            map.put("roleType", user.getRoleType().name());
+            return map;
+        }).toList();
     }
 
     @PostMapping("/logout")
