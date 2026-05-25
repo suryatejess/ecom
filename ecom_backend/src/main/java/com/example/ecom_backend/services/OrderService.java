@@ -145,7 +145,8 @@ public class OrderService {
     }
 
     public Order getOrderById(int id){
-        return orderRepository.findById(id).get();
+        return orderRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Order not found with id: " + id));
     }
 
     private OrderResponseDTO mapToOrderResponseDTO(Order order){
