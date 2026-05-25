@@ -21,15 +21,17 @@ export const AuthProvider = ({ children }) => {
             if (!response.ok) {
                 setIsLoggedIn(false);
                 setAppName(null);
-                return;
+                return null;
             }
 
             const data = await response.json();
             setIsLoggedIn(true);
             setAppName(data.name);
             setUserRole(data.roleType);
+            return data.roleType;
         } catch (error) {
             setError(error.message);
+            return null;
         }
     };
 
@@ -64,6 +66,7 @@ export const AuthProvider = ({ children }) => {
                 appName,
                 userRole,
                 fetchUsername,
+                checkIfLoggedIn,
             }}
         >
             {children}

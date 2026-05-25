@@ -25,12 +25,6 @@ const Navbar = () => {
                         </p>
                     )}
 
-                    {userRole === "ADMIN" && (
-                        <NavLink to="/admin" className="flex gap-4 font-semibold text-red-600">
-                            Admin
-                        </NavLink>
-                    )}
-
                     {/* orders */}
                     <NavLink to="/order" className="flex gap-4">
                         Orders

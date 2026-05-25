@@ -3,10 +3,10 @@ import { Link, Navigate, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 
 function AuthLogin() {
-    const { isLoggedIn, login, fetchUsername } = useAuth();
+    const { isLoggedIn, checkIfLoggedIn, userRole } = useAuth();
 
     if (isLoggedIn) {
-        return <Navigate to="/" replace />;
+        return <Navigate to={userRole === "ADMIN" ? "/admin" : "/"} replace />;
     }
 
     const [username, setUsername] = useState("");
@@ -45,9 +45,9 @@ function AuthLogin() {
                 throw new Error(await response.text());
             }
 
-            fetchUsername(username);
+            const role = await checkIfLoggedIn();
 
-            navigate("/", { replace: true });
+            navigate(role === "ADMIN" ? "/admin" : "/", { replace: true });
         } catch (err) {
             setError(err.message);
         }
