@@ -69,6 +69,7 @@ public class OrderController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public void deleteOrderById(@PathVariable int id){
         orderService.deleteOrderById(id);
     }
