@@ -62,16 +62,19 @@ public class CartService {
 
         int availableProductQuantity = product.getAvailableQuantity();
 
-        if(availableProductQuantity < quantity){
-            throw new ProductAvailableQuantityExceededException("Product quantity exceeded. availableProductQuantity : " +  availableProductQuantity + ". requiredQuantity : " +  quantity);
-        }
-
         CartItem cartItem = cartItemRepository
                 .findByCartAndProduct(cart, product)
                 .orElse(null);
 
+        int currentCartQuantity = cartItem != null ? cartItem.getQuantity() : 0;
+        int totalAfterAdd = currentCartQuantity + quantity;
+
+        if(availableProductQuantity < totalAfterAdd){
+            throw new ProductAvailableQuantityExceededException("Product quantity exceeded. availableProductQuantity : " +  availableProductQuantity + ". requiredQuantity : " +  totalAfterAdd);
+        }
+
         if (cartItem != null) {
-            cartItem.setQuantity(cartItem.getQuantity() + quantity);
+            cartItem.setQuantity(totalAfterAdd);
         } else {
             CartItem newItem = new CartItem();
             newItem.setCart(cart);

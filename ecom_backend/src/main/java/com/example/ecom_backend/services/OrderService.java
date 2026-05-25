@@ -4,6 +4,7 @@ import com.example.ecom_backend.dtos.OrderItemDTO;
 import com.example.ecom_backend.dtos.OrderResponseDTO;
 import com.example.ecom_backend.entities.*;
 import com.example.ecom_backend.exceptions.EmptyCartException;
+import com.example.ecom_backend.exceptions.InsufficientStockException;
 import com.example.ecom_backend.exceptions.ProductNotFoundException;
 import com.example.ecom_backend.repositories.CartRepository;
 import com.example.ecom_backend.repositories.OrderItemRepository;
@@ -102,13 +103,17 @@ public class OrderService {
         for(CartItem cartItem : cart.getCartItems()){
             Product  productOfCartItem = productRepository.findByIdForUpdate(cartItem.getProduct().getId()).orElseThrow(() -> new ProductNotFoundException("Product not found"));
             entityManager.refresh(productOfCartItem); // force DB read, bypass hibernate's first level cache
-            
+
             int initialProductAvailableQuantity = productOfCartItem.getAvailableQuantity();
             int quantityOfCartItem = cartItem.getQuantity();
 
             // decrement the product available quantity
             if(quantityOfCartItem > initialProductAvailableQuantity){
-                throw new RuntimeException("Not enough products available for " +  productOfCartItem.getName());
+                throw new InsufficientStockException(
+                        "Not enough products available for " + productOfCartItem.getName(),
+                        productOfCartItem.getId(),
+                        initialProductAvailableQuantity
+                );
             }
 
             productOfCartItem.setAvailableQuantity(initialProductAvailableQuantity - quantityOfCartItem);

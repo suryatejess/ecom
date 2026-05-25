@@ -3,14 +3,14 @@ import CheckoutButton from "./CheckoutButton";
 
 import { useAuth } from "../contexts/AuthContext";
 import { useCart } from "../contexts/CartContext";
+import toast from "react-hot-toast";
 
 const OrderSummary = (props) => {
     const [address, setAddress] = useState("");
     const [receiverName, setReceiverName] = useState("");
-    const [error, setError] = useState("");
 
     const { isLoggedIn } = useAuth();
-    const { clearCart } = useCart();
+    const { clearCart, updateCartItem } = useCart();
 
     const backendUrl = import.meta.env.VITE_API_BASE_URL;
 
@@ -47,15 +47,27 @@ const OrderSummary = (props) => {
             });
 
             if (!response.ok) {
-                const message = await response.text();
-                throw new Error(message || "Failed to place order");
+                const data = await response.json();
+
+                if (data.availableQuantity !== undefined) {
+                    if (data.availableQuantity === 0) {
+                        await updateCartItem(data.productId, 0);
+                        toast.error(`${data.message}. Removed from cart.`);
+                    } else {
+                        await updateCartItem(data.productId, data.availableQuantity);
+                        toast.error(`${data.message}. Cart updated to ${data.availableQuantity}.`);
+                    }
+                    return;
+                }
+
+                throw new Error(data.message || "Failed to place order");
             }
 
             await clearCart();
 
-            alert("Order placed successfully!");
+            toast.success("Order placed successfully!");
         } catch (err) {
-            setError(err.message);
+            toast.error(err.message);
         }
     };
 
@@ -104,8 +116,6 @@ const OrderSummary = (props) => {
                     onChange={(e) => setReceiverName(e.target.value)}
                     className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-black"
                 />
-
-                {error && <p className="text-red-500">{error}</p>}
 
                 {/* <CheckoutButton onCheckout={placeOrder} /> */}
 

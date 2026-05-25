@@ -14,9 +14,6 @@ const CartItem = (props) => {
     const [productImage, setProductImage] = useState(
         "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRIoTqFvPu3IOd_DzmzYwpB_GmNYcbcd02WsQ&s",
     );
-    const [productQuantity, setProductQuantity] = useState(
-        props.productQuantity,
-    );
     const [productName, setProductName] = useState("");
     const [productPrice, setProductPrice] = useState("");
 
@@ -42,28 +39,8 @@ const CartItem = (props) => {
         }
     }
 
-    async function updateQuantityBasedOnProductId(newQuantity) {
-        try {
-            const response = await fetch(`${backendUrl}/cart/`, {
-                method: "PUT",
-                credentials: "include",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    productId: props.productId,
-                    quantity: newQuantity,
-                }),
-            });
-        } catch (err) {
-            setError(err.message);
-        }
-    }
-
     const decrementQuantity = () => {
-        const newQuantity = Math.max(productQuantity - 1, 0);
-
-        setProductQuantity(newQuantity);
+        const newQuantity = Math.max(props.productQuantity - 1, 0);
         updateCartItem(props.productId, newQuantity);
     };
 
@@ -71,18 +48,14 @@ const CartItem = (props) => {
         if (!product) return;
 
         const newQuantity = Math.min(
-            productQuantity + 1,
+            props.productQuantity + 1,
             product.availableQuantity,
         );
-
-        setProductQuantity(newQuantity);
         updateCartItem(props.productId, newQuantity);
     };
 
     const clearCartAfterHittingCrossButton = async () => {
         if (!product) return;
-
-        setProductQuantity(0);
         updateCartItem(props.productId, 0);
     };
 
@@ -159,7 +132,7 @@ const CartItem = (props) => {
                             </svg>
                         </button>
 
-                        <span>{productQuantity}</span>
+                        <span>{props.productQuantity}</span>
 
                         <button
                             onClick={incrementQuantity}
