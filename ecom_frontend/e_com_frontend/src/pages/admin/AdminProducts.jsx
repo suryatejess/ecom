@@ -4,6 +4,7 @@ import toast from "react-hot-toast";
 const AdminProducts = () => {
     const backendUrl = import.meta.env.VITE_API_BASE_URL;
     const [products, setProducts] = useState([]);
+    const [search, setSearch] = useState("");
     const [editingId, setEditingId] = useState(null);
     const [editForm, setEditForm] = useState({});
     const [showAddForm, setShowAddForm] = useState(false);
@@ -67,6 +68,14 @@ const AdminProducts = () => {
         }
     };
 
+    const filteredProducts = products.filter((p) => {
+        const q = search.toLowerCase();
+        return (
+            p.name.toLowerCase().includes(q) ||
+            String(p.id).includes(q)
+        );
+    });
+
     const addProduct = async () => {
         const res = await fetch(`${backendUrl}/product/`, {
             method: "POST",
@@ -86,8 +95,8 @@ const AdminProducts = () => {
 
     return (
         <div>
-            <div className="flex justify-between items-center mb-6">
-                <h2 className="text-xl font-semibold">Products ({products.length})</h2>
+            <div className="flex justify-between items-center mb-4">
+                <h2 className="text-xl font-semibold">Products ({filteredProducts.length})</h2>
                 <button
                     onClick={() => setShowAddForm(!showAddForm)}
                     className="bg-black text-white px-4 py-2 rounded text-sm"
@@ -95,6 +104,14 @@ const AdminProducts = () => {
                     {showAddForm ? "Cancel" : "Add Product"}
                 </button>
             </div>
+
+            <input
+                type="text"
+                placeholder="Search by name or ID..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                className="border rounded px-3 py-2 text-sm w-full mb-6"
+            />
 
             {showAddForm && (
                 <div className="border rounded p-4 mb-6 space-y-3">
@@ -123,7 +140,7 @@ const AdminProducts = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {products.map((product) => (
+                    {filteredProducts.map((product) => (
                         <tr key={product.id} className="border-b">
                             {editingId === product.id ? (
                                 <>

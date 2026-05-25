@@ -9,17 +9,19 @@ const AdminOrders = () => {
     const [page, setPage] = useState(0);
     const [totalPages, setTotalPages] = useState(0);
     const [totalElements, setTotalElements] = useState(0);
+    const [statusFilter, setStatusFilter] = useState("");
     const pageSize = 10;
 
     useEffect(() => {
         fetchOrders();
-    }, [page]);
+    }, [page, statusFilter]);
 
     const fetchOrders = async () => {
-        const res = await fetch(
-            `${backendUrl}/order/admin/all?page=${page}&size=${pageSize}&sort=orderPlacedDate,desc`,
-            { credentials: "include" },
-        );
+        let url = `${backendUrl}/order/admin/all?page=${page}&size=${pageSize}&sort=orderPlacedDate,desc`;
+        if (statusFilter) {
+            url += `&status=${statusFilter}`;
+        }
+        const res = await fetch(url, { credentials: "include" });
         if (!res.ok) {
             toast.error("Failed to fetch orders");
             return;
@@ -60,9 +62,21 @@ const AdminOrders = () => {
 
     return (
         <div>
-            <h2 className="text-xl font-semibold mb-6">
-                Orders ({totalElements})
-            </h2>
+            <div className="flex justify-between items-center mb-4">
+                <h2 className="text-xl font-semibold">
+                    Orders ({totalElements})
+                </h2>
+                <select
+                    value={statusFilter}
+                    onChange={(e) => { setStatusFilter(e.target.value); setPage(0); }}
+                    className="border rounded px-3 py-2 text-sm"
+                >
+                    <option value="">All Statuses</option>
+                    {STATUS_OPTIONS.map((s) => (
+                        <option key={s} value={s}>{s}</option>
+                    ))}
+                </select>
+            </div>
 
             <table className="w-full text-sm text-left">
                 <thead className="border-b">
