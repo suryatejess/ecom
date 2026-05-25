@@ -62,4 +62,10 @@ public class ProductController {
 
     // TODO: PUT '/id' - change properties of product with that id
 
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public void delete(@PathVariable Long id){
+        productService.deleteById(id);
+    }
+
 }
