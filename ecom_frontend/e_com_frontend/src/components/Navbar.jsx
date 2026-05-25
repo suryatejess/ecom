@@ -7,7 +7,7 @@ import { useAuth } from "../contexts/AuthContext";
 import { useCart } from "../contexts/CartContext";
 
 const Navbar = () => {
-    const { isLoggedIn, appName } = useAuth();
+    const { isLoggedIn, appName, userRole } = useAuth();
     const { cartCount } = useCart();
 
     return (
@@ -23,6 +23,12 @@ const Navbar = () => {
                         <p className="text-shadow-black">
                             signed in as <span>{appName}</span>
                         </p>
+                    )}
+
+                    {userRole === "ADMIN" && (
+                        <NavLink to="/admin" className="flex gap-4 font-semibold text-red-600">
+                            Admin
+                        </NavLink>
                     )}
 
                     {/* orders */}

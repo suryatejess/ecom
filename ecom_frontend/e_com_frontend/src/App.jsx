@@ -10,6 +10,7 @@ import Auth from "./pages/Auth";
 import Home from "./pages/Home";
 import Cart from "./pages/Cart";
 import Order from "./pages/Order";
+import Admin from "./pages/Admin";
 import TestComponent from "./pages/TestComponent";
 import ProductPage from "./components/ProductPage";
 import RootLayout from "./layouts/RootLayout";
@@ -27,6 +28,7 @@ function App() {
                 </Route>
                 <Route path="/cart" element={<Cart />} />
                 <Route path="/order" element={<Order />} />
+                <Route path="/admin" element={<Admin />} />
                 <Route path="/test" element={<TestComponent />} />
                 <Route path="/product/:id" element={<ProductPage />} />
             </Route>,

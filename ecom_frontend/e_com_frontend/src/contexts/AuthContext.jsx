@@ -27,6 +27,7 @@ export const AuthProvider = ({ children }) => {
             const data = await response.json();
             setIsLoggedIn(true);
             setAppName(data.name);
+            setUserRole(data.roleType);
         } catch (error) {
             setError(error.message);
         }
@@ -37,6 +38,7 @@ export const AuthProvider = ({ children }) => {
     const [appName, setAppName] = useState("anony");
 
     const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [userRole, setUserRole] = useState(null);
 
     const login = (token) => {
         checkIfLoggedIn();
@@ -60,6 +62,7 @@ export const AuthProvider = ({ children }) => {
                 login,
                 logout,
                 appName,
+                userRole,
                 fetchUsername,
             }}
         >
