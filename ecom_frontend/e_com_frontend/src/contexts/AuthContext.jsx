@@ -47,10 +47,14 @@ export const AuthProvider = ({ children }) => {
         setIsLoggedIn(true);
     };
 
-    const logout = () => {
-        // TODO : call the logout method from the backend
-
+    const logout = async () => {
+        await fetch(backendUrl + "/auth/logout", {
+            method: "POST",
+            credentials: "include",
+        });
         setIsLoggedIn(false);
+        setAppName(null);
+        setUserRole(null);
     };
 
     const fetchUsername = (username) => {
