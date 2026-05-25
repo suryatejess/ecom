@@ -72,7 +72,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
         ResponseCookie cookie = ResponseCookie.from(properties.getCookie().getName(), jwt)
                 .httpOnly(true)
-                .secure(false)
+                .secure(properties.getCookie().isSecure())
                 .path("/")
                 .maxAge(properties.getCookie().getExpiresIn())
                 .sameSite("Lax")

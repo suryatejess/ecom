@@ -34,6 +34,7 @@ public class AppConfigurationProperties {
     public static class CookieConfiguration {
         private String name;
         private int expiresIn;
+        private boolean secure;
 
         public String getName() {
             return name;
@@ -49,6 +50,14 @@ public class AppConfigurationProperties {
 
         public void setExpiresIn(int expiresIn) {
             this.expiresIn = expiresIn;
+        }
+
+        public boolean isSecure() {
+            return secure;
+        }
+
+        public void setSecure(boolean secure) {
+            this.secure = secure;
         }
     }
 

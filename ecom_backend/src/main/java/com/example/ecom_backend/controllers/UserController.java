@@ -94,7 +94,7 @@ public class UserController {
 
             ResponseCookie cookie = ResponseCookie.from(properties.getCookie().getName(), jwt)
                     .httpOnly(true)
-                    .secure(false)
+                    .secure(properties.getCookie().isSecure())
                     .path("/")
                     .maxAge(properties.getCookie().getExpiresIn())
                     .sameSite("Lax")
@@ -148,7 +148,7 @@ public class UserController {
 
         ResponseCookie cookie = ResponseCookie.from(properties.getCookie().getName())
                 .httpOnly(true)
-                .secure(false)
+                .secure(properties.getCookie().isSecure())
                 .path("/")
                 .maxAge(0)
                 .sameSite("Lax")
