@@ -12,6 +12,8 @@ import com.example.ecom_backend.repositories.OrderRepository;
 import com.example.ecom_backend.repositories.ProductRepository;
 import jakarta.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -168,6 +170,11 @@ public class OrderService {
 
         dto.setItems(orderItemDTOList);
         return dto;
+    }
+
+    public Page<OrderResponseDTO> getAllOrders(Pageable pageable){
+        Page<Order> orders =  orderRepository.findAll(pageable);
+        return orders.map(this::mapToOrderResponseDTO);
     }
 
     public void deleteOrderById(int id){

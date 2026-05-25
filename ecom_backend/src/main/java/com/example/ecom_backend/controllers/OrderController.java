@@ -5,6 +5,9 @@ import com.example.ecom_backend.dtos.PlaceOrderRequestDTO;
 import com.example.ecom_backend.entities.Order;
 import com.example.ecom_backend.services.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -66,6 +69,12 @@ public class OrderController {
     @DeleteMapping("/{id}")
     public void deleteOrderById(@PathVariable int id){
         orderService.deleteOrderById(id);
+    }
+
+    @GetMapping("/admin/all")
+    @PreAuthorize("hasRole('ADMIN')")
+    public Page<OrderResponseDTO> getAllOrders(Pageable pageable){
+        return orderService.getAllOrders(pageable);
     }
 
 }
