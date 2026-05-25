@@ -9,9 +9,13 @@ const AddToCartButton = ({ id }) => {
         toast.success("Product added to cart");
     };
 
-    const addToCartAndDisplayToast = (id) => {
-        addToCart(id);
-        notify();
+    const addToCartAndDisplayToast = async (id) => {
+        try {
+            await addToCart(id);
+            notify();
+        } catch (err) {
+            toast.error(err.message);
+        }
     };
 
     // const [error, setError] = useState("");

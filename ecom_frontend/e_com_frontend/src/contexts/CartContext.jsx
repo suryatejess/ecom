@@ -64,12 +64,15 @@ export const CartProvider = ({ children }) => {
             });
 
             if (!response.ok) {
-                throw new Error("failed to add products to cart");
+                throw new Error(
+                    "failed to add products to cart. required quantity exceeds available quantity in the inventory",
+                );
             }
 
             await fetchCart();
         } catch (err) {
             setError(err.message);
+            throw err;
         }
     }
 
