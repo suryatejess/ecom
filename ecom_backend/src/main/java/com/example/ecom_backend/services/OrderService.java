@@ -152,6 +152,7 @@ public class OrderService {
 
         OrderResponseDTO dto = new OrderResponseDTO();
         dto.setId(order.getId());
+        dto.setUsername(order.getAppUser().getUsername());
         dto.setOrderStatus(order.getOrderStatus());
         dto.setAddress(order.getAddress());
         dto.setReceiverName(order.getReceiverName());
