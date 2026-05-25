@@ -4,10 +4,12 @@ import com.example.ecom_backend.dtos.OrderItemDTO;
 import com.example.ecom_backend.dtos.OrderResponseDTO;
 import com.example.ecom_backend.entities.*;
 import com.example.ecom_backend.exceptions.EmptyCartException;
+import com.example.ecom_backend.exceptions.ProductNotFoundException;
 import com.example.ecom_backend.repositories.CartRepository;
 import com.example.ecom_backend.repositories.OrderItemRepository;
 import com.example.ecom_backend.repositories.OrderRepository;
 import com.example.ecom_backend.repositories.ProductRepository;
+import jakarta.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,6 +30,8 @@ public class OrderService {
     private CartService cartService;
     @Autowired
     private CartRepository cartRepository;
+    @Autowired
+    EntityManager entityManager;
 
     public Order createOrder(){
         return new Order();
@@ -96,11 +100,17 @@ public class OrderService {
 //        }
 
         for(CartItem cartItem : cart.getCartItems()){
-            Product  productOfCartItem = cartItem.getProduct();
+            Product  productOfCartItem = productRepository.findByIdForUpdate(cartItem.getProduct().getId()).orElseThrow(() -> new ProductNotFoundException("Product not found"));
+            entityManager.refresh(productOfCartItem); // force DB read, bypass hibernate's first level cache
+            
             int initialProductAvailableQuantity = productOfCartItem.getAvailableQuantity();
             int quantityOfCartItem = cartItem.getQuantity();
 
             // decrement the product available quantity
+            if(quantityOfCartItem > initialProductAvailableQuantity){
+                throw new RuntimeException("Not enough products available for " +  productOfCartItem.getName());
+            }
+
             productOfCartItem.setAvailableQuantity(initialProductAvailableQuantity - quantityOfCartItem);
 
             productRepository.save(productOfCartItem);
