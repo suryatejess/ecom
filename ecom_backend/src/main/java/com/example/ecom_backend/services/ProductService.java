@@ -29,6 +29,9 @@ public class ProductService {
     }
 
     public void deleteById(Long id) {
+        if (!repo.existsById(id)) {
+            throw new ProductNotFoundException("Product not found with id: " + id);
+        }
         repo.deleteById(id);
     }
 
