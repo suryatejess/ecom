@@ -13,6 +13,7 @@ import com.example.ecom_backend.repositories.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -53,6 +54,7 @@ public class CartService {
         return cart.getCartItems();
     }
 
+    @Transactional
     public void addProductToCart(String username, Long productId, int quantity) {
 
         Cart cart = getOrCreateCartByUsername(username);
@@ -86,6 +88,7 @@ public class CartService {
         cartRepository.save(cart);
     }
 
+    @Transactional
     public void modifyProductQuantity(String username, Long productId, int quantity) {
 
         Cart cart = getOrCreateCartByUsername(username);
@@ -127,6 +130,7 @@ public class CartService {
         cartRepository.save(cart);
     }
 
+    @Transactional
     public void clearCart(String username) {
         Cart cart = getOrCreateCartByUsername(username);
 //        cart.setCartItems(null);
@@ -134,6 +138,7 @@ public class CartService {
         cartRepository.save(cart);
     }
 
+    @Transactional
     public void removeProductFromCart(String username, Long productId) {
         Cart cart = getOrCreateCartByUsername(username);
         cart.getCartItems().removeIf(cartItem -> cartItem.getProduct().getId().equals(productId));
