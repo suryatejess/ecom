@@ -1,5 +1,4 @@
 import CartItem from "../components/CartItem";
-import ClearCartButton from "../components/ClearCartButton";
 import OrderItemProduct from "../components/OrderItemProduct";
 import OrderSummary from "../components/OrderSummary";
 import ProductPage from "../components/ProductPage";
