@@ -2,6 +2,7 @@
 FROM eclipse-temurin:25 AS build
 WORKDIR /app 
 COPY . .
+RUN cp src/main/resources/application.properties.config src/main/resources/application.properties
 RUN ./mvnw clean package -DskipTests
 
 #stage 2 - runtime 
