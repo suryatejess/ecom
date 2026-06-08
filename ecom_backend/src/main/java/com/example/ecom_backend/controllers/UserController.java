@@ -97,7 +97,7 @@ public class UserController {
                     .secure(properties.getCookie().isSecure())
                     .path("/")
                     .maxAge(properties.getCookie().getExpiresIn())
-                    .sameSite("Lax")
+                    .sameSite(properties.getCookie().getSameSite())
                     .build();
 
             response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
@@ -151,7 +151,7 @@ public class UserController {
                 .secure(properties.getCookie().isSecure())
                 .path("/")
                 .maxAge(0)
-                .sameSite("Lax")
+                .sameSite(properties.getCookie().getSameSite())
                 .build();
 
         response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());

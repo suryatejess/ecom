@@ -75,7 +75,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
                 .secure(properties.getCookie().isSecure())
                 .path("/")
                 .maxAge(properties.getCookie().getExpiresIn())
-                .sameSite("Lax")
+                .sameSite(properties.getCookie().getSameSite())
                 .build();
 
         response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());

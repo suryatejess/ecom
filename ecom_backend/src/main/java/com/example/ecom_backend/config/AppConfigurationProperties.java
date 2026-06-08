@@ -35,6 +35,7 @@ public class AppConfigurationProperties {
         private String name;
         private int expiresIn;
         private boolean secure;
+        private String sameSite;
 
         public String getName() {
             return name;
@@ -58,6 +59,14 @@ public class AppConfigurationProperties {
 
         public void setSecure(boolean secure) {
             this.secure = secure;
+        }
+
+        public String getSameSite() {
+            return sameSite;
+        }
+
+        public void setSameSite(String sameSite) {
+            this.sameSite = sameSite;
         }
     }
 
