@@ -1,5 +1,6 @@
 package com.example.ecom_backend.exceptions;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -11,6 +12,18 @@ import java.util.Map;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
+
+    @ExceptionHandler(value = {DataIntegrityViolationException.class})
+    public ResponseEntity<Object> handleException(DataIntegrityViolationException e) {
+        // Thrown e.g. when concurrent requests violate the unique (cart_id, product_id)
+        // constraint on cart_item. Return a clean 409 instead of a raw 500.
+        ExceptionDTO exceptionDTO = new ExceptionDTO(
+                "Could not complete the request due to a conflicting concurrent update. Please try again.",
+                HttpStatus.CONFLICT,
+                LocalDateTime.now()
+        );
+        return new ResponseEntity<>(exceptionDTO, HttpStatus.CONFLICT);
+    }
 
     @ExceptionHandler(value = {ProductAvailableQuantityExceededException.class})
     public ResponseEntity<Object> handleException(ProductAvailableQuantityExceededException e) {
